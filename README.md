@@ -1,20 +1,24 @@
-# ListenBrainz Data
+# ListenBrainz GitHub Action
 
-A GitHub Action that fetches your ListenBrainz listening data and writes it to a structured JSON file.
+A composite GitHub Action that fetches listening data from the [ListenBrainz](https://listenbrainz.org) public API and writes it to a structured JSON file. Built as part of [gvns.ca](https://gvns.ca) ([source](https://github.com/ggfevans/gvns.ca)) and provided as-is.
 
 ## What it does
 
-This action fetches listening data from the ListenBrainz public API -- recent listens, top artists, top tracks, and top albums -- and writes a single structured JSON file to your repository. It is designed for static site generators like Astro that read data from local JSON files at build time. No authentication is needed; ListenBrainz stats are public.
+This action hits the ListenBrainz API to pull down your recent listens, top artists, top tracks, and top albums, then writes everything to a single JSON file in your repository. When paired with a commit step and a static site generator like Astro, this gives you a "live" music data page that updates on a schedule without any server-side runtime.
 
-## Usage
+No authentication is required -- ListenBrainz stats are public.
+
+## Installation
+
+Add a workflow file to your repository (e.g. `.github/workflows/update-music-data.yml`):
 
 ```yaml
 name: Update Music Data
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 */6 * * *'  # every 6 hours
+  workflow_dispatch:        # manual trigger
 
 jobs:
   update:
@@ -22,9 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: gvns/listenbrainz-github-action@v1
+      - uses: ggfevans/listenbrainz-github-action@v1
         with:
-          username: your-username
+          username: your-listenbrainz-username
 
       - name: Commit and push
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -33,39 +37,47 @@ jobs:
           file_pattern: src/data/music.json
 ```
 
+The action writes the JSON file. Committing and pushing is handled separately -- the example above uses [git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action), but you can use whatever commit strategy you prefer.
+
 ## Inputs
 
 | Name | Required | Default | Description |
 |------|----------|---------|-------------|
-| `username` | Yes | -- | ListenBrainz username |
+| `username` | Yes | -- | Your ListenBrainz username |
 | `output_path` | No | `src/data/music.json` | Path to write the JSON file |
 | `stats_range` | No | `this_month` | Time range for stats (`this_week`, `this_month`, `this_year`, `week`, `month`, `quarter`, `half_yearly`, `all_time`) |
-| `top_count` | No | `5` | Number of items in top lists |
-| `recent_count` | No | `5` | Number of recent listens |
+| `top_count` | No | `5` | Number of items in top artists/tracks/albums lists |
+| `recent_count` | No | `5` | Number of recent listens to include |
 
 ## Output JSON
 
-The action writes a single JSON file with the following top-level fields:
+The action writes a single JSON file with these fields:
 
-- `lastUpdated` -- ISO 8601 timestamp
-- `recentListens` -- array of recent listens, each with `track`, `artist`, `album`, `listenedAt`, `recordingMbid`, `artistMbids`, `caaReleaseMbid`, and `caaId`
-- `recentListensStatus` -- always `"ok"` (fetch failure is fatal)
-- `topArtists` -- array of top artists, each with `name`, `listenCount`, and `artistMbid`
-- `topArtistsStatus` -- `"ok"`, `"no_data"`, or `"error"`
-- `topTracks` -- array of top tracks, each with `track`, `artist`, `listenCount`, `recordingMbid`, `caaReleaseMbid`, and `caaId`
-- `topTracksStatus` -- `"ok"`, `"no_data"`, or `"error"`
-- `topAlbums` -- array of top albums, each with `album`, `artist`, `listenCount`, `caaReleaseMbid`, and `caaId`
-- `topAlbumsStatus` -- `"ok"`, `"no_data"`, or `"error"`
-- `stats` -- object with `totalListenCount`, `range`, `artistCount`, `albumCount`, and `trackCount`
+- `lastUpdated` -- ISO 8601 timestamp of when the data was fetched
+- `recentListens` -- array of recent listens with `track`, `artist`, `album`, `listenedAt`, `recordingMbid`, `artistMbids`, `caaReleaseMbid`, `caaId`
+- `topArtists` -- array with `name`, `listenCount`, `artistMbid`
+- `topTracks` -- array with `track`, `artist`, `listenCount`, `recordingMbid`, `caaReleaseMbid`, `caaId`
+- `topAlbums` -- array with `album`, `artist`, `listenCount`, `caaReleaseMbid`, `caaId`
+- `stats` -- object with `totalListenCount`, `range`, `artistCount`, `albumCount`, `trackCount`
 
-Each status field is one of `"ok"`, `"no_data"` (the API returned no stats for the selected range), or `"error"` (the API call failed). Your frontend can use these to decide what to render.
+Each section has a corresponding status field (`recentListensStatus`, `topArtistsStatus`, etc.) with one of three values:
 
-MBIDs and Cover Art Archive IDs are included so you can construct album art URLs on the frontend. For example:
+- `"ok"` -- data fetched successfully
+- `"no_data"` -- ListenBrainz has no stats for the selected range (common for new accounts)
+- `"error"` -- the API call failed
+
+The action fails the workflow only if recent listens cannot be fetched. Stats failures are non-fatal -- the arrays will be empty with the appropriate status.
+
+MusicBrainz IDs and Cover Art Archive IDs are passed through so your frontend can construct image URLs:
 
 ```
 https://coverartarchive.org/release/{caaReleaseMbid}/front-250
 ```
 
+## AI Disclosure
+
+This project was built with the assistance of AI tools (Claude). The design, specification, and implementation were developed collaboratively with AI-generated code. All code has been reviewed and tested, but use at your own discretion.
+
 ## License
 
-MIT
+MIT -- see [LICENSE](LICENSE) for details.
