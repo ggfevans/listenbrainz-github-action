@@ -21,6 +21,12 @@ API_BASE="https://api.listenbrainz.org/1/stats/user"
 : "${LB_TOP_COUNT:?must be set}"
 : "${LB_TMPDIR:?must be set}"
 
+# shellcheck source=validate-inputs.sh
+source "$(dirname "$0")/validate-inputs.sh"
+validate_username "$LB_USERNAME"
+validate_stats_range "$LB_STATS_RANGE"
+validate_positive_integer "top_count" "$LB_TOP_COUNT"
+
 # ---------------------------------------------------------------------------
 # Create temp directory if it doesn't exist
 # ---------------------------------------------------------------------------
