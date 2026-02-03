@@ -17,6 +17,11 @@ set -euo pipefail
 : "${LB_OUTPUT_PATH:?must be set}"
 : "${LB_TMPDIR:?must be set}"
 
+# shellcheck source=validate-inputs.sh
+source "$(dirname "$0")/validate-inputs.sh"
+validate_stats_range "$LB_STATS_RANGE"
+validate_output_path "$LB_OUTPUT_PATH"
+
 # ---------------------------------------------------------------------------
 # Ensure parent directory of output path exists
 # ---------------------------------------------------------------------------

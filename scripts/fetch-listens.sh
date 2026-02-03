@@ -19,6 +19,11 @@ API_BASE="https://api.listenbrainz.org/1/user"
 : "${LB_RECENT_COUNT:?must be set}"
 : "${LB_TMPDIR:?must be set}"
 
+# shellcheck source=validate-inputs.sh
+source "$(dirname "$0")/validate-inputs.sh"
+validate_username "$LB_USERNAME"
+validate_positive_integer "recent_count" "$LB_RECENT_COUNT"
+
 # ---------------------------------------------------------------------------
 # 1. Create temp directory if it doesn't exist
 # ---------------------------------------------------------------------------
@@ -74,6 +79,7 @@ if [ "$COUNT_STATUS" -eq 200 ]; then
   echo "Total listen count: ${TOTAL}"
 else
   echo "Warning: Could not fetch listen count (HTTP ${COUNT_STATUS}), skipping" >&2
+  echo "null" > "$LB_TMPDIR/listen-count.json"
 fi
 
 rm -f "$LB_TMPDIR/count-response.tmp"
