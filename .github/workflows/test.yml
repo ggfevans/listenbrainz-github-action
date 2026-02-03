@@ -1,0 +1,43 @@
+name: Test Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run action
+        uses: ./
+        with:
+          username: rob
+          output_path: test-output/music.json
+          stats_range: this_month
+          top_count: '3'
+          recent_count: '3'
+
+      - name: Validate output exists
+        shell: bash
+        run: |
+          test -f test-output/music.json || (echo "Output file not found" && exit 1)
+
+      - name: Validate JSON structure
+        shell: bash
+        run: |
+          jq -e '.recentListens | length > 0' test-output/music.json
+          jq -e '.recentListensStatus == "ok"' test-output/music.json
+          jq -e '.topArtistsStatus' test-output/music.json
+          jq -e '.topTracksStatus' test-output/music.json
+          jq -e '.topAlbumsStatus' test-output/music.json
+          jq -e '.stats.range == "this_month"' test-output/music.json
+          jq -e '.lastUpdated' test-output/music.json
+
+      - name: Print output for debugging
+        if: always()
+        shell: bash
+        run: cat test-output/music.json | jq . || cat test-output/music.json
