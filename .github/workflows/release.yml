@@ -47,13 +47,20 @@ jobs:
           fi
 
           # Check if this major version is already in the table
-          if grep -q "| ${MAJOR}.x" SECURITY.md; then
+          if grep -qE "\| *${MAJOR}\.x" SECURITY.md; then
             echo "${MAJOR}.x already in SECURITY.md, no update needed"
             exit 0
           fi
 
           # Add new major version row after the table header separator
-          sed -i "/^|---------|-----------|$/a | ${MAJOR}.x    | Yes       |" SECURITY.md
+          sed -i "/^| *-\+ *| *-\+ *|$/a | ${MAJOR}.x    | Yes       |" SECURITY.md
+
+          # Verify the row was actually inserted
+          if ! grep -qE "\| *${MAJOR}\.x" SECURITY.md; then
+            echo "::error::Failed to add ${MAJOR}.x to SECURITY.md supported versions"
+            exit 1
+          fi
+
           echo "Added ${MAJOR}.x to SECURITY.md supported versions"
 
       - name: Commit and push
