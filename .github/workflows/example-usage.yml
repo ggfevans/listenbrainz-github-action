@@ -1,0 +1,33 @@
+name: Example Usage
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Fetch ListenBrainz data
+        id: listenbrainz
+        uses: ./
+        with:
+          username: rob
+          output_path: src/data/music.json
+          skip_commit: 'true'
+
+      - name: Show results
+        if: always()
+        shell: bash
+        env:
+          CHANGES_DETECTED: ${{ steps.listenbrainz.outputs.changes_detected }}
+          FILE_PATH: ${{ steps.listenbrainz.outputs.file_path }}
+        run: |
+          echo "changes_detected: ${CHANGES_DETECTED}"
+          echo "file_path: ${FILE_PATH}"
+          echo "--- Output JSON ---"
+          cat src/data/music.json | jq .
