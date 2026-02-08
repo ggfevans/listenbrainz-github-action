@@ -52,22 +52,21 @@ jobs:
             exit 0
           fi
 
-          # Check if this major version is already in the table
-          if grep -qE "\| *${MAJOR}\.x" SECURITY.md; then
-            echo "${MAJOR}.x already in SECURITY.md, no update needed"
-            exit 0
+          # Update existing row for this major version, or add new one
+          if grep -qE "\| *${MAJOR}\." SECURITY.md; then
+            echo "Updating ${MAJOR} version → ${TAG_NAME} in SECURITY.md"
+            sed -i "0,/| *${MAJOR}\./c\\| ${TAG_NAME}  | Yes       |" SECURITY.md
+          else
+            echo "Adding ${TAG_NAME} to SECURITY.md supported versions"
+            sed -i "/^|[-| ]*$/a | ${TAG_NAME}  | Yes       |" SECURITY.md
           fi
 
-          # Add new major version row after the table header separator
-          sed -i "/^| *-\+ *| *-\+ *|$/a | ${MAJOR}.x    | Yes       |" SECURITY.md
-
-          # Verify the row was actually inserted
-          if ! grep -qE "\| *${MAJOR}\.x" SECURITY.md; then
-            echo "::error::Failed to add ${MAJOR}.x to SECURITY.md supported versions"
+          if ! grep -Fq "${TAG_NAME}" SECURITY.md; then
+            echo "::error::Failed to update SECURITY.md with ${TAG_NAME}"
             exit 1
           fi
 
-          echo "Added ${MAJOR}.x to SECURITY.md supported versions"
+          echo "SECURITY.md now lists ${TAG_NAME} as supported"
 
       - name: Commit and push
         shell: bash
