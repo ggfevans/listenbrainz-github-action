@@ -4,7 +4,7 @@
 
 | Version | Supported |
 |---------|-----------|
-| v1.x    | Yes       |
+| v1.1.1  | Yes       |
 
 Only the latest release is actively supported with security fixes.
 
