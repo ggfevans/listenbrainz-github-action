@@ -1,5 +1,5 @@
 name: 'ListenBrainz Music Data'
-description: 'Fetch listening data from ListenBrainz and write to JSON'
+description: 'Add music stats to your GitHub profile or site'
 branding:
   icon: 'music'
   color: 'purple'
