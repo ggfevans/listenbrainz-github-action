@@ -1,4 +1,4 @@
-name: 'ListenBrainz listening data to JSON'
+name: 'ListenBrainz Music Data'
 description: 'Fetch listening data from ListenBrainz and write to JSON'
 branding:
   icon: 'music'
