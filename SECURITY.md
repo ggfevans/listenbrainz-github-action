@@ -1,10 +1,4 @@
-# Security Policy
-
-## Supported Versions
-
-| Version | Supported |
-|---------|-----------|
-| v1.1.1  | Yes       |
+| v1.1.2  | Yes       |
 
 Only the latest release is actively supported with security fixes.
 
