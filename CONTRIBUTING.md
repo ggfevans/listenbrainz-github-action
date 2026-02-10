@@ -4,7 +4,7 @@ Thanks for your interest in contributing to this project.
 
 ## Reporting Bugs
 
-Open a [GitHub issue](https://github.com/ggfevans/listenbrainz-github-action/issues/new) with:
+Open a [GitHub issue](https://github.com/ggfevans/listenbrainz-json-bourne/issues/new) with:
 
 - What you expected to happen
 - What actually happened

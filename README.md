@@ -1,10 +1,14 @@
-# ListenBrainz GitHub Action
+# ListenBrainz JSON Bourne
+
+<p align="center">
+  <img src="static/listenbrainz-json-bourne.png" alt="ListenBrainz JSON Bourne" width="600">
+</p>
 
 A composite GitHub Action that fetches listening data from the [ListenBrainz](https://listenbrainz.org) public API and writes it to a structured JSON file. Built as part of [gwilym.ca](https://gwilym.ca) ([source](https://github.com/ggfevans/gwilym.ca)) and provided as-is.
 
 ## What it does
 
-This action hits the ListenBrainz API to pull down your recent listens, top artists, top tracks, and top albums, then writes everything to a single JSON file in your repository and commits the changes. When paired with a static site generator like Astro, this gives you a "live" music data page that updates on a schedule without any server-side runtime.
+This action infiltrates the ListenBrainz API to retrieve your recent listens, top artists, top tracks, and top albums, then writes everything to a single JSON file in your repository and commits the changes. When paired with a static site generator like Astro, this gives you a "live" music data page that updates on a schedule without any server-side runtime.
 
 No authentication is required, ListenBrainz stats are public.
 

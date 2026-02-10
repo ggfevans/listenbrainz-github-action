@@ -1,5 +1,13 @@
-| v1.1.3  | Yes       |
-| <v1.1.2 | :x:       |
+# Security Policy
+
+## Supported Versions
+
+listenbrainz-json-bourne is currently in active development. Security updates are applied to the latest version.
+
+| Version | Supported |
+| ------- | --------- |
+| v1.1.3  | :white_check_mark:       |
+| <v1.1.3 | :x:       |
 
 Only the latest release is actively supported with security fixes.
 
@@ -9,7 +17,7 @@ Only the latest release is actively supported with security fixes.
 
 Instead, please report them through GitHub's private security advisory feature:
 
-1. Go to the [Security Advisories page](https://github.com/ggfevans/listenbrainz-github-action/security/advisories)
+1. Go to the [Security Advisories page](https://github.com/ggfevans/listenbrainz-json-bourne/security/advisories)
 2. Click **"New draft security advisory"**
 3. Fill in the details of the vulnerability
 

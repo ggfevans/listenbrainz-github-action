@@ -26,15 +26,15 @@ jobs:
 
           echo "Updating docs: self-references → ${RELEASE_SHA} # ${TAG_NAME}"
 
-          sed -i "s|ggfevans/listenbrainz-github-action@[a-f0-9]\{40\} # [^ ]*|ggfevans/listenbrainz-github-action@${RELEASE_SHA} # ${TAG_NAME}|g" README.md
-          sed -i "s|ggfevans/listenbrainz-github-action@[a-f0-9]\{40\} # [^ ]*|ggfevans/listenbrainz-github-action@${RELEASE_SHA} # ${TAG_NAME}|g" example.yml
+          sed -i "s|ggfevans/listenbrainz-json-bourne@[a-f0-9]\{40\} # [^ ]*|ggfevans/listenbrainz-json-bourne@${RELEASE_SHA} # ${TAG_NAME}|g" README.md
+          sed -i "s|ggfevans/listenbrainz-json-bourne@[a-f0-9]\{40\} # [^ ]*|ggfevans/listenbrainz-json-bourne@${RELEASE_SHA} # ${TAG_NAME}|g" example.yml
 
-          if ! grep -q "ggfevans/listenbrainz-github-action@${RELEASE_SHA}" README.md; then
+          if ! grep -q "ggfevans/listenbrainz-json-bourne@${RELEASE_SHA}" README.md; then
             echo "::error::Failed to update self-reference in README.md"
             exit 1
           fi
 
-          if ! grep -q "ggfevans/listenbrainz-github-action@${RELEASE_SHA}" example.yml; then
+          if ! grep -q "ggfevans/listenbrainz-json-bourne@${RELEASE_SHA}" example.yml; then
             echo "::error::Failed to update self-reference in example.yml"
             exit 1
           fi
