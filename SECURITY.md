@@ -1,12 +1,4 @@
-# Security Policy
-
-## Supported Versions
-
-listenbrainz-json-bourne is currently in active development. Security updates are applied to the latest version.
-
-| Version | Supported |
-| ------- | --------- |
-| v2.1.0  | :white_check_mark:       |
+| v2.1.0  | Yes       |
 | <v2.1.0 | :x:       |
 
 Only the latest release is actively supported with security fixes.
