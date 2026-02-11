@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # http.sh
 # Shared HTTP fetch with retry and backoff.
 # Source this file, then call fetch_url.

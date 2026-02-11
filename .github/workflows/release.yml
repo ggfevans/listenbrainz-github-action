@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
 jobs:
   update-refs:
     runs-on: ubuntu-latest

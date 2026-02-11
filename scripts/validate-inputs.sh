@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # validate-inputs.sh
 # Shared input validation for all scripts.
 # Source this file, then call the needed validators.
